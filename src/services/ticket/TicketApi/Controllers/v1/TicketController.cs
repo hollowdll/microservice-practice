@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using TicketApi.Dtos;
+using TicketApi.Helpers;
+using TicketApi.Models;
 
 namespace TicketApi.Controllers;
 
@@ -17,7 +20,14 @@ public class TicketController : ControllerBase
     [Route("message")]
     public ActionResult Message()
     {
-        var date = DateTime.Now;
-        return Ok($"Hello! Message generated {date}");
+        return Ok($"Hello! Message generated {DateTime.Now}");
+    }
+
+    [HttpGet]
+    [Route("generatetest")]
+    public ActionResult<TicketDto> GenerateTest()
+    {
+        var ticket = new Ticket("This is a test ticket");
+        return Ok(ticket.ToDto());
     }
 }
