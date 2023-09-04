@@ -28,10 +28,10 @@ public class TicketController : ControllerBase
     }
 
     [HttpGet]
-    [Route("generatetest")]
-    public async Task<ActionResult<TicketDto>> GenerateTest()
+    [Route("generate")]
+    public async Task<ActionResult<TicketDto>> Generate()
     {
-        var ticket = new Ticket("This is a test ticket");
+        var ticket = new Ticket();
 
         _ticketContext.Tickets.Add(ticket);
         await _ticketContext.SaveChangesAsync();

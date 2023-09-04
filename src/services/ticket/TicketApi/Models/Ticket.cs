@@ -1,18 +1,20 @@
+using System.Data.SqlTypes;
+
 namespace TicketApi.Models;
 
 public class Ticket
 {
-    public Ticket() {}
-
-    public Ticket(string message)
+    public Ticket()
     {
-        Code = "ABCD1234";
-        Message = message;
-        CreatedAt = DateTime.Now;
+        var now = DateTime.Now;
+        
+        Code = Guid.NewGuid();
+        Message = $"Ticket generated {now}";
+        CreatedAt = now;
     }
 
     public long Id { get; set; }
-    public string Code { get; set; } = null!;
+    public Guid Code { get; set; }
     public string Message { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
 
