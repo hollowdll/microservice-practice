@@ -22,6 +22,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+    SeedData.InitializeDatabase(services.GetRequiredService<TicketDbContext>());
+}
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
