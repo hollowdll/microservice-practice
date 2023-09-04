@@ -4,3 +4,4 @@ obj
 logs
 target
 *.rs.bk
+*.db
