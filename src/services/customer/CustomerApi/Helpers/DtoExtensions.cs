@@ -16,7 +16,6 @@ public static class DtoExtensions
             FirstName = customer.FirstName,
             LastName = customer.LastName,
             Email = customer.Email,
-            CreatedAt = customer.CreatedAt
         };
     }
 }
