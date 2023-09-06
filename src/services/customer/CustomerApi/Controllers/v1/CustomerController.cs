@@ -22,14 +22,18 @@ public class CustomerController : ControllerBase
         _customerContext = customerDbContext;
     }
 
-    [HttpGet("all")]
-    public async Task<ActionResult<IList<CustomerDto>>> GetAllCustomersAsync()
+    [HttpGet]
+    [Route("all")]
+    public async Task<ActionResult<IList<CustomerDto>>> GetAllCustomers()
     {
-        return Ok(await _customerContext.Customers.ToListAsync());
+        var customers = await _customerContext.Customers.ToListAsync();
+        
+        return Ok(customers);
     }
 
-    [HttpGet("id/{id}")]
-    public async Task<ActionResult<CustomerDto>> GetCustomerByIdAsync(int id)
+    [HttpGet()]
+    [Route("{id}")]
+    public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
     {
         var customer = await _customerContext.Customers.FindAsync(id);
         if (customer == null)
@@ -38,5 +42,16 @@ public class CustomerController : ControllerBase
         }
 
         return Ok(customer.ToDto());
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> CreateCustomer(CustomerDto customer)
+    {
+        var newCustomer = new Customer(customer.FirstName, customer.LastName, customer.Email);
+
+        _customerContext.Customers.Add(newCustomer);
+        await _customerContext.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetCustomerById), new { id = newCustomer.Id }, newCustomer);
     }
 }
