@@ -32,7 +32,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet()]
-    [Route("{id}")]
+    [Route("id/{id}")]
     public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
     {
         var customer = await _customerContext.Customers.FindAsync(id);
