@@ -26,7 +26,9 @@ public class ReceiptController : ControllerBase
     [Route("all")]
     public async Task<ActionResult<IList<ReceiptDto>>> GetAllReceipts()
     {
-        var receipts = await _receiptContext.Receipts.ToListAsync();
+        var receipts = await _receiptContext.Receipts
+            .Select(i => i.ToDto())
+            .ToListAsync();
         
         return Ok(receipts);
     }

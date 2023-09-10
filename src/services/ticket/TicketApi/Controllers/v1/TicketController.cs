@@ -27,20 +27,8 @@ public class TicketController : ControllerBase
         return Ok($"Hello! Message generated {DateTime.Now}");
     }
 
-    [HttpGet]
-    [Route("generate")]
-    public async Task<ActionResult<TicketDto>> Generate()
-    {
-        var ticket = new Ticket();
-
-        _ticketContext.Tickets.Add(ticket);
-        await _ticketContext.SaveChangesAsync();
-
-        return Ok(ticket.ToDto());
-    }
-
     [HttpGet("id/{id}")]
-    public async Task<ActionResult<TicketDto>> GetTicketById(long id)
+    public async Task<ActionResult<TicketDto>> GetTicketById(int id)
     {
         var ticket = await _ticketContext.Tickets.FindAsync(id);
         if (ticket == null)
@@ -53,8 +41,24 @@ public class TicketController : ControllerBase
 
     [HttpGet]
     [Route("all")]
-    public async Task<ActionResult<TicketDto>> GetAllTickets()
+    public async Task<ActionResult<IList<TicketDto>>> GetAllTickets()
     {
-        return Ok(await _ticketContext.Tickets.ToListAsync());
+        var tickets = await _ticketContext.Tickets
+            .Select(i => i.ToDto())
+            .ToListAsync();
+
+        return Ok(tickets);
+    }
+
+    [HttpPost]
+    [Route("generate")]
+    public async Task<ActionResult> CreateTicket(TicketCreateDto ticketCreateDto)
+    {
+        var ticket = new Ticket(ticketCreateDto.CustomerId);
+
+        _ticketContext.Tickets.Add(ticket);
+        await _ticketContext.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetTicketById), new { id = ticket.Id }, ticket);
     }
 }

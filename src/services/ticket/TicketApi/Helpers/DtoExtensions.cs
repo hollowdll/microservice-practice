@@ -15,6 +15,7 @@ public static class DtoExtensions
             Id = ticket.Id,
             Code = ticket.Code,
             Message = ticket.Message,
+            CustomerId = ticket.CustomerId,
             CreatedAt = ticket.CreatedAt
         };
     }

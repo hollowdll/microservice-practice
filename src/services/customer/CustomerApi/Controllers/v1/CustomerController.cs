@@ -26,7 +26,9 @@ public class CustomerController : ControllerBase
     [Route("all")]
     public async Task<ActionResult<IList<CustomerDto>>> GetAllCustomers()
     {
-        var customers = await _customerContext.Customers.ToListAsync();
+        var customers = await _customerContext.Customers
+            .Select(i => i.ToDto())
+            .ToListAsync();
         
         return Ok(customers);
     }
@@ -45,13 +47,16 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateCustomer(CustomerDto customer)
+    public async Task<ActionResult> CreateCustomer(CustomerCreateDto customerCreateDto)
     {
-        var newCustomer = new Customer(customer.FirstName, customer.LastName, customer.Email);
+        var customer = new Customer(
+            customerCreateDto.FirstName,
+            customerCreateDto.LastName,
+            customerCreateDto.Email);
 
-        _customerContext.Customers.Add(newCustomer);
+        _customerContext.Customers.Add(customer);
         await _customerContext.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetCustomerById), new { id = newCustomer.Id }, newCustomer);
+        return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, customer);
     }
 }
