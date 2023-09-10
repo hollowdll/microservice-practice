@@ -45,4 +45,18 @@ public class ReceiptController : ControllerBase
 
         return Ok(receipt.ToDto());
     }
+
+    [HttpPost]
+    public async Task<ActionResult<ReceiptDto>> CreateReceipt(ReceiptCreateDto receiptCreateDto)
+    {
+        var receipt = new Receipt(
+            receiptCreateDto.CustomerId,
+            receiptCreateDto.TicketId,
+            receiptCreateDto.CustomerTicketCount);
+
+        _receiptContext.Receipts.Add(receipt);
+        await _receiptContext.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetReceiptById), new { id = receipt.Id }, receipt.ToDto());
+    }
 }

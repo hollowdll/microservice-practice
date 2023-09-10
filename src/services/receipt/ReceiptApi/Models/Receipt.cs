@@ -13,7 +13,7 @@ public class Receipt
 
     public Receipt(int customerId, int ticketId, int customerTicketCount)
     {
-        Message = "Receipt for generating a ticket";
+        Message = "Receipt for a generated ticket";
         CustomerId = customerId;
         TicketId = ticketId;
         CustomerTicketCount = customerTicketCount;

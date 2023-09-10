@@ -47,7 +47,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateCustomer(CustomerCreateDto customerCreateDto)
+    public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
     {
         var customer = new Customer(
             customerCreateDto.FirstName,
@@ -57,6 +57,6 @@ public class CustomerController : ControllerBase
         _customerContext.Customers.Add(customer);
         await _customerContext.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, customer);
+        return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, customer.ToDto());
     }
 }

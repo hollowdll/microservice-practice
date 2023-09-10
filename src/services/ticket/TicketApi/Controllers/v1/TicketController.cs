@@ -51,14 +51,13 @@ public class TicketController : ControllerBase
     }
 
     [HttpPost]
-    [Route("generate")]
-    public async Task<ActionResult> CreateTicket(TicketCreateDto ticketCreateDto)
+    public async Task<ActionResult<TicketDto>> CreateTicket(TicketCreateDto ticketCreateDto)
     {
         var ticket = new Ticket(ticketCreateDto.CustomerId);
 
         _ticketContext.Tickets.Add(ticket);
         await _ticketContext.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetTicketById), new { id = ticket.Id }, ticket);
+        return CreatedAtAction(nameof(GetTicketById), new { id = ticket.Id }, ticket.ToDto());
     }
 }
