@@ -1,6 +1,3 @@
-using CustomerApi.Models;
-using TicketApi.Models;
-
 namespace ReceiptApi.Models;
 
 public class Receipt
@@ -9,6 +6,7 @@ public class Receipt
     public string Message { get; set; } = null!;
     public int CustomerId { get; set; }
     public long TicketId { get; set; }
+    public int CustomerTicketCount { get; set; }
     public DateTime CreatedAt { get; set; }
 
     public Receipt() {}
@@ -20,6 +18,7 @@ public class Receipt
         They have generated {customerTicketCount} tickets in total.";
         CustomerId = customer.Id;
         TicketId = ticket.Id;
+        CustomerTicketCount = customerTicketCount;
         CreatedAt = DateTime.Now;
     }
 }

@@ -43,6 +43,4 @@ public class ReceiptController : ControllerBase
 
         return Ok(receipt.ToDto());
     }
-
-    
 }

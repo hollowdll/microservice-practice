@@ -1,9 +1,9 @@
-namespace TicketApi.Dtos;
+namespace ReceiptApi.Models;
 
-public class TicketDto
+public class Ticket
 {
     public long Id { get; set; }
-    public Guid Code { get; set; }
+    public string Code { get; set; } = null!;
     public string Message { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
 }
