@@ -6,10 +6,12 @@ namespace ReceiptApi.Models;
 public class Receipt
 {
     public int Id { get; set; }
-    public string Message { get; set; }
+    public string Message { get; set; } = null!;
     public int CustomerId { get; set; }
     public long TicketId { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    public Receipt() {}
 
     public Receipt(Customer customer, Ticket ticket, int customerTicketCount)
     {
