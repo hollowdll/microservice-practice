@@ -57,6 +57,8 @@ public class CustomerController : ControllerBase
         _customerContext.Customers.Add(customer);
         await _customerContext.SaveChangesAsync();
 
+        _logger.LogInformation("Created a new customer with ID '{CustomerId}' via HTTP API", customer.Id);
+
         return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, customer.ToDto());
     }
 }

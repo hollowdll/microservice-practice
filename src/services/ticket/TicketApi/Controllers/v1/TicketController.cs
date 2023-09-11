@@ -58,6 +58,8 @@ public class TicketController : ControllerBase
         _ticketContext.Tickets.Add(ticket);
         await _ticketContext.SaveChangesAsync();
 
+        _logger.LogInformation("Created a new ticket with ID '{TicketId}' via HTTP API", ticket.Id);
+
         return CreatedAtAction(nameof(GetTicketById), new { id = ticket.Id }, ticket.ToDto());
     }
 }

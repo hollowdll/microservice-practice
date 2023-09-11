@@ -57,6 +57,8 @@ public class ReceiptController : ControllerBase
         _receiptContext.Receipts.Add(receipt);
         await _receiptContext.SaveChangesAsync();
 
+        _logger.LogInformation("Created a new receipt with ID '{ReceiptId}' via HTTP API", receipt.Id);
+
         return CreatedAtAction(nameof(GetReceiptById), new { id = receipt.Id }, receipt.ToDto());
     }
 }
