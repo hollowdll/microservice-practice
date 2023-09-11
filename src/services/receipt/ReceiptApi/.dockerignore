@@ -1,0 +1,12 @@
+# directories
+**/bin/
+**/obj/
+**/out/
+logs
+
+# files
+Dockerfile*
+**/*.md
+.db
+*.db-shm
+*.db-wal
