@@ -20,13 +20,7 @@ public class TicketController : ControllerBase
         _ticketContext = ticketContext;
     }
 
-    [HttpGet]
-    [Route("message")]
-    public ActionResult Message()
-    {
-        return Ok($"Hello! Message generated {DateTime.Now}");
-    }
-
+    // Gets a ticket by id.
     [HttpGet("id/{id}")]
     public async Task<ActionResult<TicketDto>> GetTicketById(int id)
     {
@@ -39,6 +33,7 @@ public class TicketController : ControllerBase
         return Ok(ticket.ToDto());
     }
 
+    // Gets all tickets.
     [HttpGet]
     [Route("all")]
     public async Task<ActionResult<IList<TicketDto>>> GetAllTickets()
@@ -50,6 +45,7 @@ public class TicketController : ControllerBase
         return Ok(tickets);
     }
 
+    // Creates a new ticket.
     [HttpPost]
     public async Task<ActionResult<TicketDto>> CreateTicket(TicketCreateDto ticketCreateDto)
     {
@@ -61,5 +57,18 @@ public class TicketController : ControllerBase
         _logger.LogInformation("Created a new ticket with ID '{TicketId}' via HTTP API", ticket.Id);
 
         return CreatedAtAction(nameof(GetTicketById), new { id = ticket.Id }, ticket.ToDto());
+    }
+
+    // Gets all customer's tickets.
+    [HttpGet]
+    [Route("all/customer/{customerId}")]
+    public async Task<ActionResult<IList<TicketDto>>> GetCustomerTickets(int customerId)
+    {
+        var tickets = await _ticketContext.Tickets
+            .Where(i => i.CustomerId == customerId)
+            .Select(i => i.ToDto())
+            .ToListAsync();
+
+        return Ok(tickets);
     }
 }
