@@ -3,6 +3,7 @@ using ApiGateway.Config;
 using ApiGateway.Models;
 using Microsoft.Extensions.Options;
 using System.Text;
+using System.Net;
 
 namespace ApiGateway.Services;
 
@@ -40,12 +41,23 @@ public class CustomerHttpService : ICustomerService
     {
         var uri = $"{_customerUrl}{UrlsConfig.CustomerOperations.GetCustomerById(id)}";
         _logger.LogDebug("[GetById] Calling {Uri} to get customer with id {Id}", uri, id);
-        var customer = await _apiClient.GetFromJsonAsync<CustomerData>(uri);
+        var response = await _apiClient.GetAsync(uri);
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+
+        var customer = await response.Content.ReadFromJsonAsync<CustomerData>();
+        if (customer == null)
+        {
+            throw new JsonException("Failed to parse JSON into CustomerData");
+        }
 
         return customer;
     }
 
-    public async Task Create(CreateCustomerRequest createCustomerRequest)
+    public async Task<CustomerData> Create(CreateCustomerRequest createCustomerRequest)
     {
         var uri = $"{_customerUrl}{UrlsConfig.CustomerOperations.CreateCustomer()}";
         _logger.LogDebug("[Create] Calling {Uri} to create a customer", uri);
@@ -57,5 +69,13 @@ public class CustomerHttpService : ICustomerService
         var response = await _apiClient.PostAsync(uri, content);
 
         response.EnsureSuccessStatusCode();
+
+        var customer = await response.Content.ReadFromJsonAsync<CustomerData>();
+        if (customer == null)
+        {
+            throw new JsonException("Failed to parse JSON into CustomerData");
+        }
+
+        return customer;
     }
 }

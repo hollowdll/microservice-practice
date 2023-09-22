@@ -6,5 +6,5 @@ public interface ICustomerService
 {
     Task<IList<CustomerData>> GetAll();
     Task<CustomerData?> GetById(int id);
-    Task Create(CreateCustomerRequest createCustomerRequest);
+    Task<CustomerData> Create(CreateCustomerRequest createCustomerRequest);
 }
