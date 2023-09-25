@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  customer-api:
+    build:
+      context: ./src/services/customer/CustomerApi
+      dockerfile: Dockerfile
+    container_name: microservice-customerapi
+    ports:
+      - "5259:80"
+  
+  ticket-api:
+    build:
+      context: ./src/services/ticket/TicketApi
+      dockerfile: Dockerfile
+    container_name: microservice-ticketapi
+    ports:
+      - "5052:80"
+
+  receipt-api:
+    build:
+      context: ./src/services/receipt/ReceiptApi
+      dockerfile: Dockerfile
+    container_name: microservice-receiptapi
+    ports:
+      - "5003:80"
+
+  apigateway:
+    build:
+      context: ./src/apigateways/ApiGateway
+      dockerfile: Dockerfile
+    ports:
+      - "5058:80"
+    env_file:
+      - .env
+    depends_on:
+      - customer-api
+      - ticket-api
+      - receipt-api
