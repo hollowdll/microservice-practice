@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ApiGateway.Models;
 using ApiGateway.Services;
-using System.Security.Principal;
 
 namespace ApiGateway.Controllers;
 
