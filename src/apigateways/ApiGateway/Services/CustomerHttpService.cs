@@ -51,7 +51,7 @@ public class CustomerHttpService : ICustomerService
         var customer = await response.Content.ReadFromJsonAsync<CustomerData>();
         if (customer == null)
         {
-            throw new JsonException("Failed to parse JSON into CustomerData");
+            return null;
         }
 
         return customer;
@@ -73,7 +73,7 @@ public class CustomerHttpService : ICustomerService
         var customer = await response.Content.ReadFromJsonAsync<CustomerData>();
         if (customer == null)
         {
-            throw new JsonException("Failed to parse JSON into CustomerData");
+            throw new JsonException("JSON deserialization results null");
         }
 
         return customer;
