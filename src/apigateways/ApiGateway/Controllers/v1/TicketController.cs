@@ -55,14 +55,4 @@ public class TicketController : ControllerBase
 
         return CreatedAtAction(nameof(GetTicketById), new { id = ticket.Id }, null);
     }
-
-    /*
-    [HttpGet]
-    [Route("{customerId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IList<TicketData>>> GetCustomerTickets(int customerId)
-    {
-
-    }
-    */
 }

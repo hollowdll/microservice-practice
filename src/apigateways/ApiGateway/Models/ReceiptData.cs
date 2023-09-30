@@ -1,6 +1,6 @@
-namespace ReceiptApi.Dtos;
+namespace ApiGateway.Models;
 
-public class ReceiptDto
+public class ReceiptData
 {
     public int Id { get; set; }
     public string Message { get; set; } = null!;

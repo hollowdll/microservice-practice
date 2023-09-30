@@ -17,6 +17,7 @@ public static class DtoExtensions
             CustomerId = receipt.CustomerId,
             TicketId = receipt.TicketId,
             CreatedAt = receipt.CreatedAt,
+            CustomerTicketCount = receipt.CustomerTicketCount,
         };
     }
 }
