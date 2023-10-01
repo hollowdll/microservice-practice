@@ -7,4 +7,5 @@ public interface IReceiptService
     Task<IList<ReceiptData>> GetAll();
     Task<ReceiptData?> GetById(int id);
     Task<ReceiptData> Create(CreateReceiptRequest createReceiptRequest);
+    Task<IList<ReceiptData>> GetAllByCustomerId(int customerId);
 }

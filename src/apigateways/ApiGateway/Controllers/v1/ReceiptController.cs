@@ -17,8 +17,15 @@ public class ReceiptController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IList<ReceiptData>>> GetAllReceipts()
+    public async Task<ActionResult<IList<ReceiptData>>> GetAllReceipts([FromQuery(Name = "customer")] int? customerId)
     {
+        if (customerId.HasValue)
+        {
+            var customerReceipts = await _receiptService.GetAllByCustomerId((int) customerId);
+
+            return Ok(customerReceipts);
+        }
+
         var receipts = await _receiptService.GetAll();
 
         return Ok(receipts);

@@ -22,6 +22,7 @@ public class UrlsConfig
         public static string GetAllReceipts() => "/api/v1/receipt/all";
         public static string GetReceiptById(int id) => $"/api/v1/receipt/id/{id}";
         public static string CreateReceipt() => "/api/v1/receipt";
+        public static string GetCustomerReceipts(int customerId) => $"/api/v1/receipt/all/customer/{customerId}";
     }
 
     // Microservice URLs

@@ -78,4 +78,18 @@ public class ReceiptHttpService : IReceiptService
 
         return receipt;
     }
+
+    public async Task<IList<ReceiptData>> GetAllByCustomerId(int customerId)
+    {
+        var uri = $"{_receiptUrl}{UrlsConfig.ReceiptOperations.GetCustomerReceipts(customerId)}";
+        _logger.LogDebug("[GetAllByCustomerId] Calling {Uri} to get all receipts with customer id {Id}", uri, customerId);
+        var receipts = await _apiClient.GetFromJsonAsync<List<ReceiptData>>(uri);
+
+        if (receipts == null)
+        {
+            return new List<ReceiptData>();
+        }
+
+        return receipts;
+    }
 }

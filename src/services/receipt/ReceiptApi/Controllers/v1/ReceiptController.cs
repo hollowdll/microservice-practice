@@ -61,4 +61,17 @@ public class ReceiptController : ControllerBase
 
         return CreatedAtAction(nameof(GetReceiptById), new { id = receipt.Id }, receipt.ToDto());
     }
+
+    // Gets all customer's receipts.
+    [HttpGet]
+    [Route("all/customer/{customerId}")]
+    public async Task<ActionResult<IList<ReceiptDto>>> GetCustomerReceipts(int customerId)
+    {
+        var receipts = await _receiptContext.Receipts
+            .Where(i => i.CustomerId == customerId)
+            .Select(i => i.ToDto())
+            .ToListAsync();
+
+        return Ok(receipts);
+    }
 }
