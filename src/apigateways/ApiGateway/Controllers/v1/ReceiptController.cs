@@ -1,0 +1,40 @@
+using Microsoft.AspNetCore.Mvc;
+using ApiGateway.Models;
+using ApiGateway.Services;
+
+namespace ApiGateway.Controllers;
+
+[ApiController]
+[Route("api/v1/[controller]")]
+public class ReceiptController : ControllerBase
+{
+    private readonly IReceiptService _receiptService;
+    
+    public ReceiptController(IReceiptService receiptService)
+    {
+        _receiptService = receiptService;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IList<ReceiptData>>> GetAllReceipts()
+    {
+        var receipts = await _receiptService.GetAll();
+
+        return Ok(receipts);
+    }
+
+    [HttpGet]
+    [Route("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IList<ReceiptData>>> GetReceiptById(int id)
+    {
+        var receipt = await _receiptService.GetById(id);
+        if (receipt == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(receipt);
+    }
+}
