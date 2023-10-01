@@ -15,6 +15,8 @@ public class ReceiptController : ControllerBase
         _receiptService = receiptService;
     }
 
+    // Gets all receipts if no query parameters.
+    // If customer id is given in query param, returns receipts for that customer.
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IList<ReceiptData>>> GetAllReceipts([FromQuery(Name = "customer")] int? customerId)

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ApiGateway.Models;
 using ApiGateway.Services;
+using Microsoft.AspNetCore.Localization;
 
 namespace ApiGateway.Controllers;
 
@@ -9,14 +10,21 @@ namespace ApiGateway.Controllers;
 public class TicketController : ControllerBase
 {
     private readonly ITicketService _ticketService;
+    private readonly IReceiptService _receiptService;
+    private readonly ICustomerService _customerService;
     
-    public TicketController(ITicketService ticketService)
+    public TicketController(
+        ITicketService ticketService,
+        IReceiptService receiptService,
+        ICustomerService customerService)
     {
         _ticketService = ticketService;
+        _receiptService = receiptService;
+        _customerService = customerService;
     }
 
     // Gets all tickets if no query parameters.
-    // If customer id is given in query param, this returns tickets for that customer.
+    // If customer id is given in query param, returns tickets for that customer.
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IList<TicketData>>> GetAllTickets([FromQuery(Name = "customer")] int? customerId)
@@ -48,11 +56,26 @@ public class TicketController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult> CreateTicket(CreateTicketRequest createTicketRequest)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ReceiptVerboseData>> CreateTicketAndReceipt(CreateTicketRequest createTicketRequest)
     {
-        var ticket = await _ticketService.Create(createTicketRequest);
+        var customer = await _customerService.GetById(createTicketRequest.CustomerId);
+        if (customer == null)
+        {
+            return BadRequest("No customer found with the given customer id");
+        }
 
-        return CreatedAtAction(nameof(GetTicketById), new { id = ticket.Id }, null);
+        var ticket = await _ticketService.Create(createTicketRequest);
+        var customerTickets = await _ticketService.GetAllByCustomerId(createTicketRequest.CustomerId);
+
+        var receiptRequest = new CreateReceiptRequest {
+            CustomerId = createTicketRequest.CustomerId,
+            TicketId = ticket.Id,
+            CustomerTicketCount = customerTickets.Count
+        };
+        var receipt = await _receiptService.Create(receiptRequest);
+
+        return Ok(new ReceiptVerboseData { Receipt = receipt, Ticket = ticket, Customer = customer });
     }
 }
