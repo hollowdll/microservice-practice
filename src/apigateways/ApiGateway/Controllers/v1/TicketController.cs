@@ -63,7 +63,7 @@ public class TicketController : ControllerBase
         var customer = await _customerService.GetById(createTicketRequest.CustomerId);
         if (customer == null)
         {
-            return BadRequest("No customer found with the given customer id");
+            return BadRequest("Invalid customer id");
         }
 
         var ticket = await _ticketService.Create(createTicketRequest);

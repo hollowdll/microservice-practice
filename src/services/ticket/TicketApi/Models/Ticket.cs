@@ -7,7 +7,7 @@ public class Ticket
     public Ticket(int customerId)
     {   
         Code = Guid.NewGuid().ToString().ToUpper();
-        Message = "Ticket with a randomly generated code.";
+        Message = "Ticket with a randomly generated code";
         CustomerId = customerId;
         CreatedAt = DateTime.Now;
     }
