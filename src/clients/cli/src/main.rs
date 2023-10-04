@@ -1,3 +1,24 @@
+use cli::cli::{
+    Cli,
+    Commands,
+    CustomerCommands,
+};
+use clap::Parser;
+
 fn main() {
-    println!("Hello, world!");
+    let cli = Cli::parse();
+
+    match &cli.command {
+        Some(Commands::Customer(args)) => {
+            match &args.command {
+                Some(CustomerCommands::Find(args)) => {
+                    if args.all {
+                        println!("Find all customers");
+                    }
+                },
+                None => return,
+            }
+        },
+        None => return,
+    }
 }
