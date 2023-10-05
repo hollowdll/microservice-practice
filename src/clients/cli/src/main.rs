@@ -1,12 +1,18 @@
-use cli::cli::{
-    Cli,
-    Commands,
-    CustomerCommands,
+use cli::{
+    cli::{
+        Cli,
+        Commands,
+        CustomerCommands,
+    },
+    http::HttpClient
 };
 use clap::Parser;
+use std::error::Error;
 
-fn main() {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
+    let http_client = HttpClient::build();
 
     match &cli.command {
         Some(Commands::Customer(args)) => {
@@ -16,9 +22,11 @@ fn main() {
                         println!("Find all customers");
                     }
                 },
-                None => return,
+                None => return Ok(()),
             }
         },
-        None => return,
+        None => return Ok(()),
     }
+
+    Ok(())
 }
