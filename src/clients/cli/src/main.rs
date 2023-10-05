@@ -4,7 +4,7 @@ use cli::{
         Commands,
         CustomerCommands,
     },
-    http::HttpClient
+    http::HttpClient,
 };
 use clap::Parser;
 use std::error::Error;
@@ -19,7 +19,19 @@ async fn main() -> Result<(), Box<dyn Error>> {
             match &args.command {
                 Some(CustomerCommands::Find(args)) => {
                     if args.all {
-                        println!("Find all customers");
+                        match http_client.get_all_customers().await {
+                            Ok(customers) => {
+                                println!("Number of customers got: {}", customers.len());
+
+                                for customer in customers {
+                                    println!("{} {}, ID: {}",
+                                        customer.first_name,
+                                        customer.last_name,
+                                        customer.id);
+                                }
+                            },
+                            Err(e) => eprintln!("Failed to get customers: {}", e),
+                        }
                     }
                 },
                 None => return Ok(()),
