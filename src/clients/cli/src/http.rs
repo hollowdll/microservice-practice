@@ -24,13 +24,33 @@ impl HttpClient {
     /// 
     /// Returns the customers or any error that may occur.
     pub async fn get_all_customers(&self) -> Result<Vec<CustomerData>, Box<dyn Error>> {
-        let customers = self.client
+        let response = self.client
             .get(self.url_config.get_all_customers())
             .send()
-            .await?
-            .json::<Vec<CustomerData>>()
             .await?;
+        
+        if !response.status().is_success() {
+            return Err(format!("{}", response.status()).into())
+        }
+        let customers = response.json::<Vec<CustomerData>>().await?;
 
         Ok(customers)
+    }
+
+    /// Sends HTTP GET request to the API gateway to get customer by id.
+    /// 
+    /// Returns the customer if it was found or any error that may occur.
+    pub async fn get_customer_by_id(&self, id: i32) -> Result<CustomerData, Box<dyn Error>> {
+        let response = self.client
+            .get(self.url_config.get_customer_by_id(id))
+            .send()
+            .await?;
+
+        if !response.status().is_success() {
+            return Err(format!("{}", response.status()).into())
+        }
+        let customer = response.json::<CustomerData>().await?;
+
+        Ok(customer)
     }
 }

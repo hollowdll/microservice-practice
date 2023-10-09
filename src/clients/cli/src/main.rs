@@ -21,7 +21,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     if args.all {
                         match http_client.get_all_customers().await {
                             Ok(customers) => {
-                                println!("Number of customers got: {}", customers.len());
+                                println!("Number of customers found: {}", customers.len());
 
                                 for customer in customers {
                                     println!("{} {}, ID: {}",
@@ -31,6 +31,16 @@ async fn main() -> Result<(), Box<dyn Error>> {
                                 }
                             },
                             Err(e) => eprintln!("Failed to get customers: {}", e),
+                        }
+                    } else if let Some(id) = args.id {
+                        match http_client.get_customer_by_id(id).await {
+                            Ok(customer) => {
+                                println!("{} {}, ID: {}",
+                                    customer.first_name,
+                                    customer.last_name,
+                                    customer.id);
+                            },
+                            Err(e) => eprintln!("Failed to get customer: {}", e),
                         }
                     }
                 },
