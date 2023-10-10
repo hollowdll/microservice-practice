@@ -21,4 +21,9 @@ impl UrlConfig {
     pub fn get_customer_by_id(&self, id: i32) -> String {
         format!("{}/customer/{}", self.api_gateway, id)
     }
+
+    /// Returns the API endpoint to add a customer.
+    pub fn add_customer(&self) -> String {
+        format!("{}/customer", self.api_gateway)
+    }
 }

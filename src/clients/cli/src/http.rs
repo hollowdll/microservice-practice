@@ -1,7 +1,10 @@
 use reqwest::Client;
 use crate::{
     config::UrlConfig,
-    customer::CustomerData
+    customer::{
+        CustomerData,
+        CustomerCreateData,
+    },
 };
 use std::error::Error;
 
@@ -30,7 +33,7 @@ impl HttpClient {
             .await?;
         
         if !response.status().is_success() {
-            return Err(format!("{}", response.status()).into())
+            return Err(format!("{}", response.status()).into());
         }
         let customers = response.json::<Vec<CustomerData>>().await?;
 
@@ -47,10 +50,27 @@ impl HttpClient {
             .await?;
 
         if !response.status().is_success() {
-            return Err(format!("{}", response.status()).into())
+            return Err(format!("{}", response.status()).into());
         }
         let customer = response.json::<CustomerData>().await?;
 
         Ok(customer)
+    }
+
+    /// Sends HTTP POST request to the API gateway to add a customer.
+    /// 
+    /// Returns Ok(()) if successful or any error that may occur.
+    pub async fn add_customer(&self, customer: &CustomerCreateData) -> Result<(), Box<dyn Error>> {
+        let response = self.client
+            .post(self.url_config.add_customer())
+            .json(customer)
+            .send()
+            .await?;
+
+        if !response.status().is_success() {
+            return Err(format!("{}", response.status()).into());
+        }
+
+        Ok(())
     }
 }
