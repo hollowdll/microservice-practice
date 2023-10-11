@@ -8,6 +8,7 @@ use customer::CustomerCreateData;
 
 pub mod cli;
 pub mod customer;
+pub mod ticket;
 pub mod http;
 pub mod config;
 
