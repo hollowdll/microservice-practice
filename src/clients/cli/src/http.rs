@@ -60,7 +60,7 @@ impl HttpClient {
     /// Sends HTTP POST request to the API gateway to add a customer.
     /// 
     /// Returns Ok(()) if successful or any error that may occur.
-    pub async fn add_customer(&self, customer: &CustomerCreateData) -> Result<(), Box<dyn Error>> {
+    pub async fn add_customer(&self, customer: &CustomerCreateData) -> Result<CustomerData, Box<dyn Error>> {
         let response = self.client
             .post(self.url_config.add_customer())
             .json(customer)
@@ -70,7 +70,8 @@ impl HttpClient {
         if !response.status().is_success() {
             return Err(format!("{}", response.status()).into());
         }
+        let customer = response.json::<CustomerData>().await?;
 
-        Ok(())
+        Ok(customer)
     }
 }

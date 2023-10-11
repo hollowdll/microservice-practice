@@ -48,7 +48,14 @@ pub async fn run(cli: &Cli, http_client: &HttpClient) {
                 &args.email
             );
             match http_client.add_customer(&customer).await {
-                Ok(()) => println!("Customer added"),
+                Ok(customer) => {
+                    println!("Customer added");
+                    println!("ID: {}", customer.id);
+                    println!("First name: {}", customer.first_name);
+                    println!("Last name: {}", customer.last_name);
+                    println!("Email: {}", customer.email);
+                    println!("Created at: {}", customer.created_at);
+                },
                 Err(e) => eprintln!("Failed to add customer: {}", e),
             }
         } else {

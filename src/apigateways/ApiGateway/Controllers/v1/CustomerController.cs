@@ -40,10 +40,10 @@ public class CustomerController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult> CreateCustomer(CreateCustomerRequest createCustomerRequest)
+    public async Task<ActionResult<CustomerData>> CreateCustomer(CreateCustomerRequest createCustomerRequest)
     {
         var customer = await _customerService.Create(createCustomerRequest);
 
-        return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, null);
+        return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, customer);
     }
 }
