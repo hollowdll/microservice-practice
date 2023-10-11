@@ -13,6 +13,7 @@ pub struct TicketData {
     /// Ticket message.
     pub message: String,
     /// Customer id.
+    #[serde(rename = "customerId")]
     pub customer_id: i32,
     /// Date and time when created in ISO-8601 format.
     #[serde(rename = "createdAt")]
