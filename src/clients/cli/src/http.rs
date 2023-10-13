@@ -9,6 +9,7 @@ use crate::{
         TicketData,
         TicketCreateData,
     },
+    receipt::ReceiptVerboseData,
 };
 use std::error::Error;
 
@@ -39,9 +40,9 @@ impl HttpClient {
         if !response.status().is_success() {
             return Err(format!("{}", response.status()).into());
         }
-        let customers = response.json::<Vec<CustomerData>>().await?;
+        let data = response.json::<Vec<CustomerData>>().await?;
 
-        Ok(customers)
+        Ok(data)
     }
 
     /// Sends HTTP GET request to the API gateway to get customer by id.
@@ -56,14 +57,14 @@ impl HttpClient {
         if !response.status().is_success() {
             return Err(format!("{}", response.status()).into());
         }
-        let customer = response.json::<CustomerData>().await?;
+        let data = response.json::<CustomerData>().await?;
 
-        Ok(customer)
+        Ok(data)
     }
 
     /// Sends HTTP POST request to the API gateway to add a customer.
     /// 
-    /// Returns Ok(()) if successful or any error that may occur.
+    /// Returns the created customer if successful or any error that may occur.
     pub async fn add_customer(&self, customer: &CustomerCreateData) -> Result<CustomerData, Box<dyn Error>> {
         let response = self.client
             .post(self.url_config.add_customer())
@@ -74,9 +75,9 @@ impl HttpClient {
         if !response.status().is_success() {
             return Err(format!("{}", response.status()).into());
         }
-        let customer = response.json::<CustomerData>().await?;
+        let data = response.json::<CustomerData>().await?;
 
-        Ok(customer)
+        Ok(data)
     }
 
     /// Sends HTTP GET request to the API gateway to get all tickets.
@@ -91,8 +92,26 @@ impl HttpClient {
         if !response.status().is_success() {
             return Err(format!("{}", response.status()).into());
         }
-        let tickets = response.json::<Vec<TicketData>>().await?;
+        let data = response.json::<Vec<TicketData>>().await?;
 
-        Ok(tickets)
+        Ok(data)
+    }
+
+    /// Sends HTTP POST request to the API gateway to create a ticket.
+    /// 
+    /// Returns receipt data about the ticket if successful or any error that may occur.
+    pub async fn create_ticket(&self, ticket: &TicketCreateData) -> Result<ReceiptVerboseData, Box<dyn Error>> {
+        let response = self.client
+            .post(self.url_config.create_ticket())
+            .json(ticket)
+            .send()
+            .await?;
+
+        if !response.status().is_success() {
+            return Err(format!("{}", response.status()).into());
+        }
+        let data = response.json::<ReceiptVerboseData>().await?;
+
+        Ok(data)
     }
 }
