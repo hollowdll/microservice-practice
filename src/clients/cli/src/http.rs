@@ -5,6 +5,10 @@ use crate::{
         CustomerData,
         CustomerCreateData,
     },
+    ticket::{
+        TicketData,
+        TicketCreateData,
+    },
 };
 use std::error::Error;
 
@@ -73,5 +77,22 @@ impl HttpClient {
         let customer = response.json::<CustomerData>().await?;
 
         Ok(customer)
+    }
+
+    /// Sends HTTP GET request to the API gateway to get all tickets.
+    /// 
+    /// Returns the tickets or any error that may occur.
+    pub async fn get_all_tickets(&self) -> Result<Vec<TicketData>, Box<dyn Error>> {
+        let response = self.client
+            .get(self.url_config.get_all_tickets())
+            .send()
+            .await?;
+        
+        if !response.status().is_success() {
+            return Err(format!("{}", response.status()).into());
+        }
+        let tickets = response.json::<Vec<TicketData>>().await?;
+
+        Ok(tickets)
     }
 }

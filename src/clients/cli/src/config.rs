@@ -26,4 +26,19 @@ impl UrlConfig {
     pub fn add_customer(&self) -> String {
         format!("{}/customer", self.api_gateway)
     }
+
+    /// Returns the API endpoint to get all customers.
+    pub fn get_all_tickets(&self) -> String {
+        format!("{}/ticket", self.api_gateway)
+    }
+
+    /// Returns the API endpoint to get a customer's tickets.
+    pub fn get_customer_tickets(&self, customer_id: i32) -> String {
+        format!("{}/ticket?customer={}", self.api_gateway, customer_id)
+    }
+
+    /// Returns the API endpoint to create a ticket.
+    pub fn create_ticket(&self) -> String {
+        format!("{}/ticket", self.api_gateway)
+    }
 }
