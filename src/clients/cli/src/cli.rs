@@ -16,12 +16,20 @@ pub struct Cli {
 pub enum Commands {
     /// Customer related features
     Customer(CustomerArgs),
+    /// Ticket related features
+    Ticket(TicketArgs),
 }
 
 #[derive(Args)]
 pub struct CustomerArgs {
     #[command(subcommand)]
     pub command: Option<CustomerCommands>,
+}
+
+#[derive(Args)]
+pub struct TicketArgs {
+    #[command(subcommand)]
+    pub command: Option<TicketCommands>,
 }
 
 #[derive(Subcommand)]
@@ -31,6 +39,15 @@ pub enum CustomerCommands {
 
     /// Add a customer
     Add(AddCustomerArgs),
+}
+
+#[derive(Subcommand)]
+pub enum TicketCommands {
+    /// Find tickets
+    Find(FindTicketArgs),
+
+    /// Create a ticket
+    Create(CreateTicketArgs),
 }
 
 #[derive(Args)]
@@ -57,4 +74,18 @@ pub struct AddCustomerArgs {
     /// Customer email address
     #[arg(short, long)]
     pub email: String,
+}
+
+#[derive(Args)]
+pub struct FindTicketArgs {
+    /// Find all tickets
+    #[arg(short, long)]
+    pub all: bool,
+}
+
+#[derive(Args)]
+pub struct CreateTicketArgs {
+    /// Customer id
+    #[arg(short, long)]
+    pub customer_id: i32,
 }
