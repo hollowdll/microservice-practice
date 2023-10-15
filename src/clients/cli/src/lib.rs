@@ -2,9 +2,11 @@ use cli::{
     Cli,
     Commands,
     CustomerCommands,
+    TicketCommands,
 };
 use http::HttpClient;
 use customer::CustomerCreateData;
+use ticket::TicketCreateData;
 
 pub mod cli;
 pub mod customer;
@@ -62,6 +64,45 @@ pub async fn run(cli: &Cli, http_client: &HttpClient) {
             }
         } else {
             return
+        }
+    } else if let Some(Commands::Ticket(args)) = &cli.command {
+        if let Some(TicketCommands::Find(args)) = &args.command {
+            if args.all {
+                match http_client.get_all_tickets().await {
+                    Ok(data) => {
+                        println!("Number of tickets found: {}", data.len());
+
+                        for ticket in data {
+                            println!("\nID: {}", ticket.id);
+                            println!("Code: {}", ticket.code);
+                            println!("Message: {}", ticket.message);
+                            println!("Created: {}", ticket.created_at);
+                        }
+                    },
+                    Err(e) => eprintln!("Failed to get tickets: {}", e),
+                }
+            }
+        } else if let Some(TicketCommands::Create(args)) = &args.command {
+            let ticket = TicketCreateData { customer_id: args.customer_id };
+            
+            match http_client.create_ticket(&ticket).await {
+                Ok(data) => {
+                    println!("{}", data.receipt.message);
+                    println!("Receipt created: {}", data.receipt.created_at);
+                    println!("Receipt ID: {}", data.receipt.id);
+                    println!("Customer: {} {}, ID: {}",
+                        data.customer.first_name,
+                        data.customer.last_name,
+                        data.customer.id);
+                    println!("Email address: {}", data.customer.email);
+                    println!("Tickets created for this customer: {}", data.receipt.customer_ticket_count);
+                    println!("\nTicket ID: {}", data.ticket.id);
+                    println!("Code: {}", data.ticket.code);
+                    println!("Message: {}", data.ticket.message);
+                    println!("Created: {}", data.ticket.created_at);
+                },
+                Err(e) => eprintln!("Failed to create ticket: {}", e),
+            }
         }
     } else {
         return
