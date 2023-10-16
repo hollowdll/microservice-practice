@@ -45,7 +45,7 @@ impl HttpClient {
         Ok(data)
     }
 
-    /// Sends HTTP GET request to the API gateway to get customer by id.
+    /// Sends HTTP GET request to the API gateway to get a customer by id.
     /// 
     /// Returns the customer if it was found or any error that may occur.
     pub async fn get_customer_by_id(&self, id: i32) -> Result<CustomerData, Box<dyn Error>> {
@@ -114,6 +114,23 @@ impl HttpClient {
         Ok(data)
     }
 
+    /// Sends HTTP GET request to the API gateway to get a ticket by id.
+    /// 
+    /// Returns the customer if it was found or any error that may occur.
+    pub async fn get_ticket_by_id(&self, id: i32) -> Result<TicketData, Box<dyn Error>> {
+        let response = self.client
+            .get(self.url_config.get_ticket_by_id(id))
+            .send()
+            .await?;
+
+        if !response.status().is_success() {
+            return Err(format!("{}", response.status()).into());
+        }
+        let data = response.json::<TicketData>().await?;
+
+        Ok(data)
+    }
+
     /// Sends HTTP POST request to the API gateway to create a ticket.
     /// 
     /// Returns receipt data about the ticket if successful or any error that may occur.
@@ -125,7 +142,7 @@ impl HttpClient {
             .await?;
 
         if !response.status().is_success() {
-            return Err(format!("{}", response.status()).into());
+            return Err(format!("{}: {}", response.status(), response.text().await?).into());
         }
         let data = response.json::<ReceiptVerboseData>().await?;
 

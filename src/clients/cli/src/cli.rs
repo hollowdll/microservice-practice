@@ -56,7 +56,7 @@ pub struct FindCustomerArgs {
     #[arg(short, long)]
     pub all: bool,
 
-    /// Customer id
+    /// Find customer by id
     #[arg(short, long)]
     pub id: Option<i32>,
 }
@@ -81,6 +81,10 @@ pub struct FindTicketArgs {
     /// Find all tickets
     #[arg(short, long)]
     pub all: bool,
+
+    /// Find ticket by id
+    #[arg(short, long)]
+    pub id: Option<i32>,
 
     /// Find a specific customer's tickets
     #[arg(short, long)]

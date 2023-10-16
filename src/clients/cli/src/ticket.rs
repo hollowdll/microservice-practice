@@ -30,7 +30,7 @@ pub struct TicketCreateData {
 
 /// Print ticket info to standard output.
 pub fn print_ticket(ticket: &TicketData) {
-    println!("\nID: {}", ticket.id);
+    println!("ID: {}", ticket.id);
     println!("Code: {}", ticket.code);
     println!("Message: {}", ticket.message);
     println!("Created: {}", ticket.created_at);

@@ -76,10 +76,16 @@ pub async fn run(cli: &Cli, http_client: &HttpClient) {
                         println!("Number of tickets found: {}", data.len());
 
                         for ticket in data {
+                            println!();
                             print_ticket(&ticket);
                         }
                     },
                     Err(e) => eprintln!("Failed to get tickets: {}", e),
+                }
+            } else if let Some(id) = args.id {
+                match http_client.get_ticket_by_id(id).await {
+                    Ok(data) => print_ticket(&data),
+                    Err(e) => eprintln!("Failed to get ticket: {}", e),
                 }
             } else if let Some(customer_id) = args.customer_id {
                 match http_client.get_customer_tickets(customer_id).await {
@@ -87,6 +93,7 @@ pub async fn run(cli: &Cli, http_client: &HttpClient) {
                         println!("Number of tickets found: {}", data.len());
 
                         for ticket in data {
+                            println!();
                             print_ticket(&ticket);
                         }
                     },
