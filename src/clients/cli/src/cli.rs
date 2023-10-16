@@ -81,11 +81,15 @@ pub struct FindTicketArgs {
     /// Find all tickets
     #[arg(short, long)]
     pub all: bool,
+
+    /// Find a specific customer's tickets
+    #[arg(short, long)]
+    pub customer_id: Option<i32>,
 }
 
 #[derive(Args)]
 pub struct CreateTicketArgs {
-    /// Customer id
+    /// Customer who this ticket should be created for
     #[arg(short, long)]
     pub customer_id: i32,
 }

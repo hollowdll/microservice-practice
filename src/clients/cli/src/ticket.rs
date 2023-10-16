@@ -27,3 +27,11 @@ pub struct TicketCreateData {
     #[serde(rename = "customerId")]
     pub customer_id: i32,
 }
+
+/// Print ticket info to standard output.
+pub fn print_ticket(ticket: &TicketData) {
+    println!("\nID: {}", ticket.id);
+    println!("Code: {}", ticket.code);
+    println!("Message: {}", ticket.message);
+    println!("Created: {}", ticket.created_at);
+}

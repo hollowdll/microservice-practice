@@ -6,7 +6,10 @@ use cli::{
 };
 use http::HttpClient;
 use customer::CustomerCreateData;
-use ticket::TicketCreateData;
+use ticket::{
+    TicketCreateData,
+    print_ticket,
+};
 
 pub mod cli;
 pub mod customer;
@@ -73,13 +76,21 @@ pub async fn run(cli: &Cli, http_client: &HttpClient) {
                         println!("Number of tickets found: {}", data.len());
 
                         for ticket in data {
-                            println!("\nID: {}", ticket.id);
-                            println!("Code: {}", ticket.code);
-                            println!("Message: {}", ticket.message);
-                            println!("Created: {}", ticket.created_at);
+                            print_ticket(&ticket);
                         }
                     },
                     Err(e) => eprintln!("Failed to get tickets: {}", e),
+                }
+            } else if let Some(customer_id) = args.customer_id {
+                match http_client.get_customer_tickets(customer_id).await {
+                    Ok(data) => {
+                        println!("Number of tickets found: {}", data.len());
+
+                        for ticket in data {
+                            print_ticket(&ticket);
+                        }
+                    },
+                    Err(e) => eprintln!("Failed to get customer's tickets: {}", e),
                 }
             }
         } else if let Some(TicketCommands::Create(args)) = &args.command {

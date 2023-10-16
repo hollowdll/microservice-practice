@@ -97,6 +97,23 @@ impl HttpClient {
         Ok(data)
     }
 
+    /// Sends HTTP GET request to the API gateway to get a customer's tickets.
+    /// 
+    /// Returns the tickets or any error that may occur.
+    pub async fn get_customer_tickets(&self, customer_id: i32) -> Result<Vec<TicketData>, Box<dyn Error>> {
+        let response = self.client
+            .get(self.url_config.get_customer_tickets(customer_id))
+            .send()
+            .await?;
+        
+        if !response.status().is_success() {
+            return Err(format!("{}", response.status()).into());
+        }
+        let data = response.json::<Vec<TicketData>>().await?;
+
+        Ok(data)
+    }
+
     /// Sends HTTP POST request to the API gateway to create a ticket.
     /// 
     /// Returns receipt data about the ticket if successful or any error that may occur.
