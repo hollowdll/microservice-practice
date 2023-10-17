@@ -8,6 +8,8 @@ services:
     container_name: microservice-customerapi
     ports:
       - "5259:80"
+    volumes:
+      - customerdata:/app/sqlite
   
   ticket-api:
     build:
@@ -16,6 +18,8 @@ services:
     container_name: microservice-ticketapi
     ports:
       - "5052:80"
+    volumes:
+      - ticketdata:/app/sqlite
 
   receipt-api:
     build:
@@ -24,6 +28,8 @@ services:
     container_name: microservice-receiptapi
     ports:
       - "5003:80"
+    volumes:
+      - receiptdata:/app/sqlite
 
   apigateway:
     build:
@@ -37,3 +43,8 @@ services:
       - customer-api
       - ticket-api
       - receipt-api
+
+volumes:
+  customerdata:
+  ticketdata:
+  receiptdata:
