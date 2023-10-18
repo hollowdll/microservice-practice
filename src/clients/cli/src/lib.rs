@@ -19,7 +19,7 @@ pub mod config;
 /// Checks the passed commands and arguments.
 pub async fn run(cli: &Cli, http_client: &HttpClient) {
     if let Some(Commands::Customer(args)) = &cli.command {
-        if let Some(CustomerCommands::Find(args)) = &args.command {
+        if let Some(CustomerCommands::Get(args)) = &args.command {
             if args.all {
                 match http_client.get_all_customers().await {
                     Ok(data) => {
@@ -54,7 +54,7 @@ pub async fn run(cli: &Cli, http_client: &HttpClient) {
             return
         }
     } else if let Some(Commands::Ticket(args)) = &cli.command {
-        if let Some(TicketCommands::Find(args)) = &args.command {
+        if let Some(TicketCommands::Get(args)) = &args.command {
             if args.all {
                 match http_client.get_all_tickets().await {
                     Ok(data) => {

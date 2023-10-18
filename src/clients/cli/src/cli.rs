@@ -34,8 +34,8 @@ pub struct TicketArgs {
 
 #[derive(Subcommand)]
 pub enum CustomerCommands {
-    /// Find customers
-    Find(FindCustomerArgs),
+    /// Get customers
+    Get(GetCustomerArgs),
 
     /// Add a customer
     Add(AddCustomerArgs),
@@ -43,20 +43,20 @@ pub enum CustomerCommands {
 
 #[derive(Subcommand)]
 pub enum TicketCommands {
-    /// Find tickets
-    Find(FindTicketArgs),
+    /// Get tickets
+    Get(GetTicketArgs),
 
     /// Create a ticket
     Create(CreateTicketArgs),
 }
 
 #[derive(Args)]
-pub struct FindCustomerArgs {
-    /// Find all customers
+pub struct GetCustomerArgs {
+    /// Get all customers
     #[arg(short, long)]
     pub all: bool,
 
-    /// Find customer by id
+    /// Get customer by id
     #[arg(short, long)]
     pub id: Option<i32>,
 }
@@ -77,16 +77,16 @@ pub struct AddCustomerArgs {
 }
 
 #[derive(Args)]
-pub struct FindTicketArgs {
-    /// Find all tickets
+pub struct GetTicketArgs {
+    /// Get all tickets
     #[arg(short, long)]
     pub all: bool,
 
-    /// Find ticket by id
+    /// Get ticket by id
     #[arg(short, long)]
     pub id: Option<i32>,
 
-    /// Find a specific customer's tickets
+    /// Get a specific customer's tickets
     #[arg(short, long)]
     pub customer_id: Option<i32>,
 }
