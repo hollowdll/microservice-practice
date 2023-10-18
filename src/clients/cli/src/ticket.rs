@@ -25,11 +25,12 @@ impl Display for TicketData {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "Ticket ID: {}\nCode: {}\nMessage: {}\nCreated: {}",
+            "Ticket ID: {}\nCode: {}\nMessage: {}\nCreated: {}\nCustomer ID: {}",
             self.id,
             self.code,
             self.message,
-            self.created_at
+            self.created_at,
+            self.customer_id
         )
     }
 }
