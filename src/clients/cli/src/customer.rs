@@ -2,6 +2,7 @@ use serde::{
     Serialize,
     Deserialize,
 };
+use std::fmt::{self, Display};
 
 /// Holds customer data.
 #[derive(Deserialize)]
@@ -19,6 +20,20 @@ pub struct CustomerData {
     /// Date and time when created in ISO-8601 format.
     #[serde(rename = "createdAt")]
     pub created_at: String,
+}
+
+impl Display for CustomerData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{} {}, ID: {}\nEmail: {}\nAdded: {}",
+            self.first_name,
+            self.last_name,
+            self.id,
+            self.email,
+            self.created_at
+        )
+    }
 }
 
 /// Used to create customers.

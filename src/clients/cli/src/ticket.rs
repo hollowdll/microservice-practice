@@ -2,6 +2,7 @@ use serde::{
     Serialize,
     Deserialize,
 };
+use std::fmt::Display;
 
 /// Holds ticket data.
 #[derive(Deserialize)]
@@ -20,18 +21,23 @@ pub struct TicketData {
     pub created_at: String,
 }
 
+impl Display for TicketData {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Ticket ID: {}\nCode: {}\nMessage: {}\nCreated: {}",
+            self.id,
+            self.code,
+            self.message,
+            self.created_at
+        )
+    }
+}
+
 /// Used to create tickets.
 #[derive(Serialize)]
 pub struct TicketCreateData {
     /// Customer id.
     #[serde(rename = "customerId")]
     pub customer_id: i32,
-}
-
-/// Print ticket info to standard output.
-pub fn print_ticket(ticket: &TicketData) {
-    println!("ID: {}", ticket.id);
-    println!("Code: {}", ticket.code);
-    println!("Message: {}", ticket.message);
-    println!("Created: {}", ticket.created_at);
 }
