@@ -12,6 +12,8 @@ message CustomerCreateRequest {
     string email = 3;
 }
 
+message CustomerGetRequest {}
+
 message CustomerResponse {
     int32 id = 1;
     string first_name = 2;
@@ -21,11 +23,11 @@ message CustomerResponse {
 }
 
 message CustomerListResponse {
-    repeated CustomerData customers = 1;
+    repeated CustomerResponse customers = 1;
 }
 
 service Customer {
-    rpc GetAllCustomers () returns (CustomerListResponse) {}
-    rpc GetCustomerById () returns (CustomerResponse) {}
+    rpc GetAllCustomers (CustomerGetRequest) returns (CustomerListResponse) {}
+    rpc GetCustomerById (CustomerGetRequest) returns (CustomerResponse) {}
     rpc CreateCustomer (CustomerCreateRequest) returns (CustomerResponse) {}
 }
