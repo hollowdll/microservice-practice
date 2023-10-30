@@ -52,6 +52,23 @@ public class CustomerService : Customer.CustomerBase
         return new CustomerResponse();
     }
 
+    public override async Task<CustomerResponse> CreateCustomer(CustomerCreateRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation("[CustomerService] gRPC call method {Method}", context.Method);
+
+        var customer = new CustomerApi.Models.Customer(
+            request.FirstName,
+            request.LastName,
+            request.Email);
+
+        _customerDbContext.Customers.Add(customer);
+        await _customerDbContext.SaveChangesAsync();
+
+        context.Status = new Status(StatusCode.OK, "Customer added");
+
+        return MapToCustomerResponse(customer);
+    }
+
     private static CustomerResponse MapToCustomerResponse(CustomerApi.Models.Customer customer)
     {
         return new CustomerResponse
