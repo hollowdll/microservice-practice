@@ -33,6 +33,25 @@ public class CustomerService : Customer.CustomerBase
         return response;
     }
 
+    public override async Task<CustomerResponse> GetCustomerById(CustomerGetByIdRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation("[CustomerService] gRPC call method {Method}", context.Method);
+
+        var customer = await _customerDbContext.Customers.FindAsync(request.Id);
+        if (customer == null)
+        {
+            context.Status = new Status(StatusCode.NotFound, $"Customer with id {request.Id} not found");
+        }
+        else
+        {
+            context.Status = new Status(StatusCode.OK, $"Customer with id {request.Id} found");
+
+            return MapToCustomerResponse(customer);
+        }
+
+        return new CustomerResponse();
+    }
+
     private static CustomerResponse MapToCustomerResponse(CustomerApi.Models.Customer customer)
     {
         return new CustomerResponse
