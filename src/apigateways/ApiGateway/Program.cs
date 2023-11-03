@@ -7,6 +7,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplicationServices();
+builder.Services.AddGrpcServices();
 
 builder.Services.Configure<UrlsConfig>(builder.Configuration.GetSection("urls"));
 

@@ -77,7 +77,7 @@ public class CustomerService : Customer.CustomerBase
             FirstName = customer.FirstName,
             LastName = customer.LastName,
             Email = customer.LastName,
-            CreatedAt = Timestamp.FromDateTime(customer.CreatedAt),
+            CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(customer.CreatedAt, DateTimeKind.Utc)),
         };
     }
 }

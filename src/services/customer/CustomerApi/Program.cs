@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using CustomerApi.Data;
+using GrpcCustomer;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddGrpc();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -30,6 +32,8 @@ using (var serviceScope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+
+app.MapGrpcService<CustomerService>();
 app.MapControllers();
 
 app.Run();

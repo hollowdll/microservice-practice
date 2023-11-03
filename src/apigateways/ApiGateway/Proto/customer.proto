@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcCustomer";
+
+package CustomerAPI;
+
+import "google/protobuf/timestamp.proto";
+
+message CustomerCreateRequest {
+    string first_name = 1;
+    string last_name = 2;
+    string email = 3;
+}
+
+message CustomerGetRequest {}
+
+message CustomerGetByIdRequest {
+    int32 id = 1;
+}
+
+message CustomerResponse {
+    int32 id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string email = 4;
+    google.protobuf.Timestamp created_at = 5;
+}
+
+message CustomerListResponse {
+    repeated CustomerResponse customers = 1;
+}
+
+service Customer {
+    rpc GetAllCustomers (CustomerGetRequest) returns (CustomerListResponse) {}
+    rpc GetCustomerById (CustomerGetByIdRequest) returns (CustomerResponse) {}
+    rpc CreateCustomer (CustomerCreateRequest) returns (CustomerResponse) {}
+}

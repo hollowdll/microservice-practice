@@ -5,17 +5,19 @@ services:
     build:
       context: ./src/services/customer/CustomerApi
       dockerfile: Dockerfile
-    container_name: microservice-customerapi
+    container_name: customerapi
     ports:
-      - "5259:80"
+      - "80"
     volumes:
       - customerdata:/app/sqlite
+    environment:
+      - Kestrel__Endpoints__gRPC__Url=http://customer-api:5260
   
   ticket-api:
     build:
       context: ./src/services/ticket/TicketApi
       dockerfile: Dockerfile
-    container_name: microservice-ticketapi
+    container_name: ticketapi
     ports:
       - "5052:80"
     volumes:
@@ -25,7 +27,7 @@ services:
     build:
       context: ./src/services/receipt/ReceiptApi
       dockerfile: Dockerfile
-    container_name: microservice-receiptapi
+    container_name: receiptapi
     ports:
       - "5003:80"
     volumes:
@@ -35,6 +37,7 @@ services:
     build:
       context: ./src/apigateways/ApiGateway
       dockerfile: Dockerfile
+    container_name: apigateway
     ports:
       - "5058:80"
     env_file:
