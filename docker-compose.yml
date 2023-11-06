@@ -6,8 +6,6 @@ services:
       context: ./src/services/customer/CustomerApi
       dockerfile: Dockerfile
     container_name: customerapi
-    ports:
-      - "80"
     volumes:
       - customerdata:/app/sqlite
     environment:
